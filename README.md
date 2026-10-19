@@ -1,10 +1,3 @@
-# TestLab
+# QA Automation Learning
 
-Personal learning project focused on:
-
--Python
--Playwright
--SQL
--Test Automation
-
-TestLab is a sample application used for learning test automation concepts and building practical QA skills.
+QA Automation Learning is a personal sandbox used for learning Python, practicing test automation, and building practical QA skills.
