@@ -5,3 +5,4 @@ __pycache__/
 *.pyc
 .idea/
 user_data/
+test-results/
