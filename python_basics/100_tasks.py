@@ -204,3 +204,41 @@ except ZeroDivisionError:
     print("You cannot divide by zero!")
 
 # Task 26
+
+try:
+    number_1 = int(input("Enter the first number: "))
+    number_2 = int(input("Enter the second number: "))
+    quotient = number_1 / number_2
+    print(f"The result is {quotient}")
+except ZeroDivisionError:
+    print("You cannot divide by zero!")
+except ValueError:
+    print("The input value has to be a number.")
+
+# Task 27
+
+while True:
+    try:
+        number_1 = int(input("Enter the first number: "))
+        number_2 = int(input("Enter the second number: "))
+        quotient = number_1 / number_2
+        print(f"The result is {quotient}")
+        break
+    except ZeroDivisionError:
+        print("You cannot divide by zero!")
+        continue
+    except ValueError:
+        print("The input value has to be a number.")
+        continue
+
+# Task 28
+
+with open("movies.txt", "w") as file:
+        for x in range (0,3):
+            movie = (input("What is your favourite movie?"))
+            file.write(movie + "\n")
+with open("movies.txt", "r") as file:
+    print("\n Saved movies")
+    print(file.read())
+
+
