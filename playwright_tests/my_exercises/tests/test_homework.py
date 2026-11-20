@@ -1,5 +1,6 @@
 from playwright.sync_api import Page, expect
 
+
 def test_search_results(page: Page):
     page.goto("https://playwright.dev/python")
     page.get_by_role("button", name="Search").click()
