@@ -41,3 +41,14 @@ def test_task_count(page: Page):
     add_task(page, "Water plants")
     add_task(page, "Wash the dishes")
     expect(get_task(page)).to_have_count(3)
+
+
+def test_delete_task(page: Page):
+    page.goto(URL)
+    add_task(page, "Go for a walk")
+    add_task(page, "Buy dog's food")
+    row = page.get_by_role("listitem").filter(has_text="Go for a walk")
+    row.hover()
+    row.get_by_role("button", name="Delete").click()
+    expect(get_task(page)).to_have_count(1)
+    expect(get_task(page)).to_have_text("Buy dog's food")
