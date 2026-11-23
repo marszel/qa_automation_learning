@@ -13,10 +13,14 @@ def get_task_checkbox(page: Page, chore: str):
     return page.get_by_role("listitem").filter(has_text=chore).get_by_role("checkbox", name="Toggle Todo")
 
 
+def get_task(page: Page):
+    return page.get_by_test_id("todo-title")
+
+
 def test_add_task(page: Page):
     page.goto(URL)
     add_task(page, "Buy milk")
-    job = page.get_by_test_id("todo-title")
+    job = get_task(page)
     expect(job).to_have_text("Buy milk")
 
 
@@ -29,3 +33,11 @@ def test_complete_task(page: Page):
     call_mom_checkbox = get_task_checkbox(page, "Call mom")
     expect(buy_milk_checkbox).to_be_checked()
     expect(call_mom_checkbox).not_to_be_checked()
+
+
+def test_task_count(page: Page):
+    page.goto(URL)
+    add_task(page, "Buy bread")
+    add_task(page, "Water plants")
+    add_task(page, "Wash the dishes")
+    expect(get_task(page)).to_have_count(3)
