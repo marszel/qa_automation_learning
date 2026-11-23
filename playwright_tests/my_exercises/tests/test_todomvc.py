@@ -1,3 +1,4 @@
+import re
 from playwright.sync_api import Page, expect
 
 URL = "https://demo.playwright.dev/todomvc"
@@ -52,3 +53,35 @@ def test_delete_task(page: Page):
     row.get_by_role("button", name="Delete").click()
     expect(get_task(page)).to_have_count(1)
     expect(get_task(page)).to_have_text("Buy dog's food")
+
+
+def test_check_active(page: Page):
+    page.goto(URL)
+    add_task(page, "Learn Playwright")
+    add_task(page, "Make dinner")
+    learn_playwright_checkbox = get_task_checkbox(page, "Learn Playwright")
+    learn_playwright_checkbox.check()
+    page.get_by_role("link", name="Active").click()
+    expect(page).to_have_url(re.compile(r"active"))
+    expect(get_task(page)).to_have_count(1)
+    expect(get_task(page)).to_have_text("Make dinner")
+
+
+def test_task_changing(page: Page):
+    page.goto(URL)
+    add_task(page, "Make dinner")
+    get_task(page).dblclick()
+    edit_box = page.get_by_role("textbox", name="Edit")
+    edit_box.fill("Make lunch")
+    edit_box.press("Enter")
+    expect(get_task(page)).to_have_text("Make lunch")
+
+
+def test_left_items_count(page: Page):
+    page.goto(URL)
+    add_task(page, "Eat breakfast")
+    add_task(page, "Wash teeth")
+    add_task(page, "Take a shower")
+    wash_teeth_checkbox = get_task_checkbox(page, "Wash teeth")
+    wash_teeth_checkbox.check()
+    expect(page.get_by_text("2 items left")).to_be_visible()
