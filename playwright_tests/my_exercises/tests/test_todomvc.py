@@ -1,5 +1,5 @@
 import re
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Page, expect, Browser
 
 URL = "https://demo.playwright.dev/todomvc"
 
@@ -36,7 +36,7 @@ def test_complete_task(page: Page):
     expect(call_mom_checkbox).not_to_be_checked()
 
 
-def test_task_count(page: Page):
+def test_task_count_after_adding_three_tasks(page: Page):
     page.goto(URL)
     add_task(page, "Buy bread")
     add_task(page, "Water plants")
@@ -55,7 +55,7 @@ def test_delete_task(page: Page):
     expect(get_task(page)).to_have_text("Buy dog's food")
 
 
-def test_check_active(page: Page):
+def test_filter_active_tasks(page: Page):
     page.goto(URL)
     add_task(page, "Learn Playwright")
     add_task(page, "Make dinner")
@@ -67,7 +67,7 @@ def test_check_active(page: Page):
     expect(get_task(page)).to_have_text("Make dinner")
 
 
-def test_task_changing(page: Page):
+def test_edit_task(page: Page):
     page.goto(URL)
     add_task(page, "Make dinner")
     get_task(page).dblclick()
@@ -77,7 +77,7 @@ def test_task_changing(page: Page):
     expect(get_task(page)).to_have_text("Make lunch")
 
 
-def test_left_items_count(page: Page):
+def test_items_left_counter(page: Page):
     page.goto(URL)
     add_task(page, "Eat breakfast")
     add_task(page, "Wash teeth")
@@ -85,3 +85,17 @@ def test_left_items_count(page: Page):
     wash_teeth_checkbox = get_task_checkbox(page, "Wash teeth")
     wash_teeth_checkbox.check()
     expect(page.get_by_text("2 items left")).to_be_visible()
+
+
+def test_contexts_are_isolated(browser: Browser):
+    context_a = browser.new_context()
+    context_b = browser.new_context()
+    page_a = context_a.new_page()
+    page_b = context_b.new_page()
+    page_a.goto(URL)
+    page_b.goto(URL)
+    add_task(page_a, "Buy milk")
+    expect(get_task(page_a)).to_have_text("Buy milk")
+    expect(get_task(page_b)).to_have_count(0)
+    context_a.close()
+    context_b.close()
